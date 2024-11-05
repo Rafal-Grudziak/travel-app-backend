@@ -5,31 +5,35 @@ namespace App\Services;
 use App\Http\DTOs\ProfileUpdateDto;
 use App\Models\User;
 
-class ProfileService
+class ProfileService extends ModelService
 {
 
-    public function updateProfile(User $user, ProfileUpdateDto $dto, $avatar): User
+    protected function getModelClass(): string
     {
-        if($avatar) {
-            $path = $avatar->store('avatars', 'public');
-        }
+        return User::class;
+    }
 
-        $user = $this->setUserValues($user, $dto, $path ?? null);
+    public function updateProfile(User $user, ProfileUpdateDto $dto): User
+    {
+
+        $user = $this->setUserValues($user, $dto);
         $user->save();
 
         return $user;
     }
 
-    private function setUserValues(User $user, ProfileUpdateDto $dto, ?string $avatar): User
+    private function setUserValues(User $user, ProfileUpdateDto $dto): User
     {
-        $user->setAttribute('email', $dto->email);
-        $user->setAttribute('name', $dto->name);
-        $user->setAttribute('bio', $dto->bio);
-        $user->setAttribute('facebook_link', $dto->facebook_link);
-        $user->setAttribute('instagram_link', $dto->instagram_link);
-        $user->setAttribute('x_link', $dto->x_link);
-        $user->setAttribute('avatar', $avatar);
-        //todo travel preferences
+        $user->fill([
+            'email' => $dto->email,
+            'name' => $dto->name,
+            'bio' => $dto->bio,
+            'facebook_link' => $dto->facebook_link,
+            'instagram_link' => $dto->instagram_link,
+            'x_link' => $dto->x_link,
+        ]);
+
+        $user->travelPreferences()->sync($dto->travel_preferences);
 
         return $user;
     }
