@@ -195,7 +195,7 @@ class ProfileController extends BaseController
         }
 
         $dto = new ProfileUpdateDto(...$request->validated());
-        $updatedUser = $profileService->updateProfile($user, $dto, $request->hasFile('avatar') ? $request->file('avatar') : null);
+        $updatedUser = $profileService->updateProfile($user, $dto);
 
         return response()->json(new ProfileResource($updatedUser));
     }

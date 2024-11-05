@@ -16,7 +16,7 @@ class ProfileUpdateRequest extends FormRequest
             'instagram_link' => 'nullable|url|max:128',
             'x_link' => 'nullable|url|max:128',
             'bio' => 'nullable|max:300',
-            'travel_preferences' => 'nullable|array',
+            'travel_preferences' => 'nullable|array|exists:travel_preferences,id',
         ];
     }
 }

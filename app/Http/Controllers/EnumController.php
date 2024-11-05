@@ -42,7 +42,7 @@ class EnumController extends BaseController
             )
         ]
     )]
-    public function getTravelPreferences(Request $request)
+    public function getTravelPreferences(): JsonResponse
     {
         return response()->json(EnumResource::collection(TravelPreference::all()));
     }
