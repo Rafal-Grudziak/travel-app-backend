@@ -3,14 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\FriendStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, HasMergedRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -49,8 +52,35 @@ class User extends Authenticatable
         ];
     }
 
-    public function travelPreferences()
+    public function travelPreferences(): BelongsToMany
     {
         return $this->belongsToMany(TravelPreference::class);
+    }
+
+    public function friendsAsSender(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'sender_id', 'receiver_id')
+            ->withPivot('status');
+    }
+
+    public function friendsAsReceiver(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'friends', 'receiver_id', 'sender_id')
+            ->withPivot('status');
+    }
+
+    public function acceptedFriendsAsSender()
+    {
+        return $this->friendsAsSender()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED->value);
+    }
+
+    public function acceptedFriendsAsReceiver()
+    {
+        return $this->friendsAsReceiver()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED->value);
+    }
+
+    public function friends()
+    {
+        return $this->mergedRelationWithModel(User::class, 'friends_view');
     }
 }
