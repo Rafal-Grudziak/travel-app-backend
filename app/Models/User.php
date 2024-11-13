@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
+use Staudenmeir\LaravelMergedRelations\Eloquent\Relations\MergedRelation;
 
 class User extends Authenticatable
 {
@@ -69,18 +70,42 @@ class User extends Authenticatable
             ->withPivot('status');
     }
 
-    public function acceptedFriendsAsSender()
+    public function acceptedFriendsAsSender(): BelongsToMany
     {
         return $this->friendsAsSender()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED->value);
     }
 
-    public function acceptedFriendsAsReceiver()
+    public function acceptedFriendsAsReceiver(): BelongsToMany
     {
         return $this->friendsAsReceiver()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED->value);
     }
 
-    public function friends()
+    public function friends(): MergedRelation
     {
         return $this->mergedRelationWithModel(User::class, 'friends_view');
+    }
+
+    public function getFriendshipStatus(): int
+    {
+        $user = auth()->user();
+        $friend = Friend::where(function ($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                    ->where('receiver_id', $this->id);
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('sender_id', $this->id)
+                    ->where('receiver_id', $user->id);
+            })
+            ->first();
+
+        if ($friend === null) {
+            return 0;
+        } elseif ($friend->status === FriendStatus::REQUEST_ACCEPTED) {
+            return 1;
+        } elseif ($friend->sender_id === $user->id) {
+            return 2;
+        } else {
+            return 3;
+        }
     }
 }

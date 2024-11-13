@@ -41,15 +41,7 @@ class FriendController extends BaseController
                     ]
                 )
             ),
-            new OA\Response(
-                response: 400,
-                description: 'Bad request - possibly already sent request',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Request already sent or invalid user.')
-                    ]
-                )
-            ),
+
             new OA\Response(
                 response: 400,
                 description: 'Bad Request',
@@ -181,13 +173,9 @@ class FriendController extends BaseController
             )
         ]
     )]
-    public function reject(Request $request, $requestId, FriendService $friendRequestService): JsonResponse
+    public function reject(Request $request, $requestId): JsonResponse
     {
-        $friendRequest = Friend::findOrFail($requestId);
-
-        if(!$friendRequestService->rejectFriendRequest($friendRequest)) {
-            return response()->json(['message' => 'Error occured.'], 400);
-        }
+        Friend::findOrFail($requestId)?->delete();
 
         return response()->json(['message' => 'Friend request rejected.']);
     }
@@ -244,7 +232,7 @@ class FriendController extends BaseController
             )
         ]
     )]
-    public function list(Request $request, FriendService $friendRequestService): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $friends = auth()->user()->friends()->paginate(10);
 

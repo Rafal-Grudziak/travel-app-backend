@@ -19,7 +19,7 @@ class ProfileListResource extends JsonResource
             'name' => $this->resource->name,
             'avatar' => $this->resource->avatar,
             'bio' => $this->resource->bio,
-            'friend_status' => null //TODO
+            'friend_status' => $this->resource->getFriendshipStatus(),
         ];
     }
 }

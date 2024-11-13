@@ -40,17 +40,6 @@ class FriendService extends ModelService
         return false;
     }
 
-    public function rejectFriendRequest(Friend $friendRequest): bool
-    {
-        if($friendRequest->status === FriendStatus::REQUEST_PENDING->value) {
-            $friendRequest->setAttribute('status', FriendStatus::REQUEST_REJECTED->value);
-            $friendRequest->save();
-            return true;
-        }
-        return false;
-    }
-
-
     public function getPendingRequests(User $user)
     {
         return $this->getModel()

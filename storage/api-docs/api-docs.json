@@ -326,14 +326,14 @@
                         }
                     },
                     "400": {
-                        "description": "Bad request - possibly already sent request",
+                        "description": "Bad Request",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Request already sent or invalid user."
+                                            "example": "Friend request already exists."
                                         }
                                     },
                                     "type": "object"
@@ -1092,6 +1092,10 @@
                                                     "bio": {
                                                         "type": "string",
                                                         "example": "Traveler and photographer"
+                                                    },
+                                                    "friend_status": {
+                                                        "type": "integer",
+                                                        "example": 1
                                                     }
                                                 },
                                                 "type": "object"

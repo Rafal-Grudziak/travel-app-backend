@@ -49,32 +49,7 @@ class ProfileService extends ModelService
                 }
             ]);
 
-        // Paginacja
         $results = $query->paginate($dto->perPage ?? 10);
-
-        // Dodajemy mapowanie dla każdego użytkownika na paginowanych wynikach
-        $results->getCollection()->transform(function ($user) use ($userId) {
-            if ($user->friendsAsSender->isNotEmpty()) {
-                $status = $user->friendsAsSender->first()->pivot->status;
-                return [
-                    'user' => new ProfileBasicResource($user),
-                    'friend_status' => $status,
-                    'is_sender' => true
-                ];
-            } elseif ($user->friendsAsReceiver->isNotEmpty()) {
-                $status = $user->friendsAsReceiver->first()->pivot->status;
-                return [
-                    'user' => new ProfileBasicResource($user),
-                    'friend_status' => $status,
-                    'is_sender' => false
-                ];
-            } else {
-                return [
-                    'user' => new ProfileBasicResource($user),
-                    'friend_status' => null
-                ];
-            }
-        });
 
         return $results;
     }

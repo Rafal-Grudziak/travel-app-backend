@@ -6,7 +6,7 @@ use App\Http\DTOs\ProfileSearchDto;
 use App\Http\DTOs\ProfileUpdateDto;
 use App\Http\Requests\ProfileSearchRequest;
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Resources\ProfileBasicResource;
+use App\Http\Resources\ProfileListResource;
 use App\Http\Resources\ProfileResource;
 use App\Http\Responses\PaginatedResponse;
 use App\Models\User;
@@ -240,6 +240,7 @@ class ProfileController extends BaseController
                                     new OA\Property(property: 'name', type: 'string', example: 'John Doe'),
                                     new OA\Property(property: 'avatar', type: 'string', example: 'https://example.com/avatar.jpg'),
                                     new OA\Property(property: 'bio', type: 'string', example: 'Traveler and photographer'),
+                                    new OA\Property(property: 'friend_status', type: 'integer', example: 1),
                                 ],
                                 type: 'object'
                             )
@@ -274,7 +275,7 @@ class ProfileController extends BaseController
         $dto = new ProfileSearchDto(...$request->validated());
         $results = $profileService->search($dto);
 
-        return PaginatedResponse::format($results, ProfileBasicResource::class);
+        return PaginatedResponse::format($results, ProfileListResource::class);
     }
 
 }
