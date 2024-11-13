@@ -20,7 +20,7 @@ class FriendService extends ModelService
 
             $friendRequest->setAttribute('sender_id', $sender->id);
             $friendRequest->setAttribute('receiver_id', $receiver->id);
-            $friendRequest->setAttribute('status', FriendStatus::REQUEST_PENDING->value);
+            $friendRequest->setAttribute('status', FriendStatus::REQUEST_PENDING);
 
             $friendRequest->save();
 
@@ -32,8 +32,8 @@ class FriendService extends ModelService
 
     public function acceptFriendRequest(Friend $friendRequest): bool
     {
-        if($friendRequest->status === FriendStatus::REQUEST_PENDING->value) {
-            $friendRequest->setAttribute('status', FriendStatus::REQUEST_ACCEPTED->value);
+        if($friendRequest->status === FriendStatus::REQUEST_PENDING) {
+            $friendRequest->setAttribute('status', FriendStatus::REQUEST_ACCEPTED);
             $friendRequest->save();
             return true;
         }
@@ -44,7 +44,7 @@ class FriendService extends ModelService
     {
         return $this->getModel()
             ->where('receiver_id', $user->id)
-            ->where('status', FriendStatus::REQUEST_PENDING->value)
+            ->where('status', FriendStatus::REQUEST_PENDING)
             ->with('sender')
             ->paginate(10);
     }

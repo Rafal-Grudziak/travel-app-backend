@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
-            $table->string('status', 16)->default(FriendStatus::REQUEST_PENDING->value);
+            $table->string('status', 16)->default(FriendStatus::REQUEST_PENDING);
             $table->timestamps();
         });
     }

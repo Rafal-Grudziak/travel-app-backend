@@ -72,12 +72,12 @@ class User extends Authenticatable
 
     public function acceptedFriendsAsSender(): BelongsToMany
     {
-        return $this->friendsAsSender()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED->value);
+        return $this->friendsAsSender()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED);
     }
 
     public function acceptedFriendsAsReceiver(): BelongsToMany
     {
-        return $this->friendsAsReceiver()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED->value);
+        return $this->friendsAsReceiver()->wherePivot('status', FriendStatus::REQUEST_ACCEPTED);
     }
 
     public function friends(): MergedRelation
