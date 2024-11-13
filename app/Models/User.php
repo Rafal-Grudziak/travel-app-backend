@@ -108,4 +108,12 @@ class User extends Authenticatable
             return 3;
         }
     }
+
+    public function getReceivedFriendRequestId(): ?int
+    {
+        $user = auth()->user();
+        return Friend::where('sender_id', $this->id)
+            ->where('receiver_id', $user->id)
+            ->first()?->id;
+    }
 }

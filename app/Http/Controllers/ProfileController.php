@@ -241,6 +241,7 @@ class ProfileController extends BaseController
                                     new OA\Property(property: 'avatar', type: 'string', example: 'https://example.com/avatar.jpg'),
                                     new OA\Property(property: 'bio', type: 'string', example: 'Traveler and photographer'),
                                     new OA\Property(property: 'friend_status', type: 'integer', example: 1),
+                                    new OA\Property(property: 'received_request_id', type: 'integer', example: 1),
                                 ],
                                 type: 'object'
                             )

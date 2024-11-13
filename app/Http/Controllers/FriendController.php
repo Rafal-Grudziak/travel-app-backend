@@ -264,7 +264,8 @@ class FriendController extends BaseController
                                         new OA\Property(property: 'bio', type: 'string', example: 'Traveler and photographer')
                                     ],
                                         type: 'object'
-                                    )
+                                    ),
+                                    new OA\Property(property: 'created_at_diff', type: 'string', example: '2 hours ago'),
                                 ]
                             )
                         ),

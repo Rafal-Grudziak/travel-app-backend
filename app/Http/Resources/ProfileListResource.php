@@ -20,6 +20,7 @@ class ProfileListResource extends JsonResource
             'avatar' => $this->resource->avatar,
             'bio' => $this->resource->bio,
             'friend_status' => $this->resource->getFriendshipStatus(),
+            'received_request_id' => $this->resource->getReceivedFriendRequestId(),
         ];
     }
 }
