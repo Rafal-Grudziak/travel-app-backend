@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('/enums')->name('enums.')->group(function () {
         Route::get('/travel-preferences', [EnumController::class, 'getTravelPreferences'])->name('travel_preferences');
+        Route::get('/travel-categories', [EnumController::class, 'getTravelCategories'])->name('travel_categories');
     });
 
 });

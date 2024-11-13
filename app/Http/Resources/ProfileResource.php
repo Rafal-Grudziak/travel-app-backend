@@ -23,8 +23,8 @@ class ProfileResource extends JsonResource
             'x_link' => $this->resource->x_link,
             'bio' => $this->resource->bio,
             'travel_preferences' => EnumResource::collection($this->resource->travelPreferences),
-            'trips_count' => 3,
-            'planned_trips_count' => 5,
+            'trips_count' => 3, //todo
+            'planned_trips_count' => 5, //todo
         ];
     }
 }
