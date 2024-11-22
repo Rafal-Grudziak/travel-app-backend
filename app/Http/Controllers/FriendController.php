@@ -7,7 +7,6 @@ use App\Http\Resources\FriendRequestResource;
 use App\Http\Resources\ProfileBasicResource;
 use App\Http\Responses\PaginatedResponse;
 use App\Models\Friend;
-use App\Models\User;
 use App\Services\FriendService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
