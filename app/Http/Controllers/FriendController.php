@@ -20,7 +20,7 @@ class FriendController extends BaseController
     #[OA\Get(
         path: '/api/friends/list',
         description: 'Get a list of users friends.',
-        summary: 'Get a list of users friends.',
+        summary: 'Get a list of users friends',
         security: [['sanctum' => []]],
         tags: ['Friends'],
         responses: [

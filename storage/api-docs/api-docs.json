@@ -348,7 +348,7 @@
                 "tags": [
                     "Friends"
                 ],
-                "summary": "Get a list of users friends.",
+                "summary": "Get a list of users friends",
                 "description": "Get a list of users friends.",
                 "operationId": "c2b8e10b5829e4369bbd387c74036987",
                 "responses": {
