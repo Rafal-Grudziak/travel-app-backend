@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SendFriendRequestRequest;
 use App\Http\Resources\FriendRequestResource;
 use App\Http\Resources\ProfileBasicResource;
 use App\Http\Responses\PaginatedResponse;
@@ -16,170 +17,6 @@ use OpenApi\Attributes as OA;
 #[OA\Tag(name: "Friends")]
 class FriendController extends BaseController
 {
-    #[OA\Post(
-        path: '/api/friends/send-request/{user}',
-        description: 'Send a friend request to a user.',
-        summary: 'Send friend request',
-        security: [['sanctum' => []]],
-        tags: ['Friends'],
-        parameters: [
-            new OA\Parameter(
-                name: 'user',
-                description: 'ID of the user to send a friend request to',
-                in: 'path',
-                required: true,
-                schema: new OA\Schema(type: 'integer', example: 1)
-            ),
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Friend request sent successfully',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Friend request sent.')
-                    ]
-                )
-            ),
-
-            new OA\Response(
-                response: 400,
-                description: 'Bad Request',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Friend request already exists.')
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 401,
-                description: 'Unauthorized',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.')
-                    ]
-                )
-            )
-        ]
-    )]
-    public function send(Request $request, $receiverId, FriendService $friendRequestService): JsonResponse
-    {
-        $receiver = User::findOrFail($receiverId);
-
-        if(!$friendRequestService->sendFriendRequest(auth()->user(), $receiver)) {
-            return response()->json(['message' => 'Friend request already exists.'], 400);
-        }
-
-        return response()->json(['message' => 'Friend request sent.']);
-    }
-
-    #[OA\Post(
-        path: '/api/friends/accept-request/{friend_request}',
-        description: 'Accept a pending friend request.',
-        summary: 'Accept friend request',
-        security: [['sanctum' => []]],
-        tags: ['Friends'],
-        parameters: [
-            new OA\Parameter(
-                name: 'friend_request',
-                description: 'ID of the friend request to be accepted.',
-                in: 'path',
-                required: true,
-                schema: new OA\Schema(type: 'integer', example: 1)
-            ),
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Friend request accepted successfully',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Friend request accepted.')
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 400,
-                description: 'Bad request - friend request already accepted or not pending',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Invalid request or already accepted.')
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 401,
-                description: 'Unauthorized',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.')
-                    ]
-                )
-            )
-        ]
-    )]
-    public function accept(Request $request, $requestId, FriendService $friendRequestService): JsonResponse
-    {
-        $friendRequest = Friend::findOrFail($requestId);
-        if(!$friendRequestService->acceptFriendRequest($friendRequest)) {
-            return response()->json(['message' => 'Error occured.'], 400);
-        }
-
-        return response()->json(['message' => 'Friend request accepted.']);
-    }
-
-    #[OA\Post(
-        path: '/api/friends/reject-request/{friend_request}',
-        description: 'ID of the friend request to be rejected.',
-        summary: 'Reject friend request',
-        security: [['sanctum' => []]],
-        tags: ['Friends'],
-        parameters: [
-            new OA\Parameter(
-                name: 'friend_request',
-                description: 'ID of the user whose friend request is to be rejected',
-                in: 'path',
-                required: true,
-                schema: new OA\Schema(type: 'integer', example: 1)
-            ),
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Friend request rejected successfully',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Friend request rejected.')
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 400,
-                description: 'Bad request - friend request already rejected or invalid',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Invalid request or already rejected.')
-                    ]
-                )
-            ),
-            new OA\Response(
-                response: 401,
-                description: 'Unauthorized',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.')
-                    ]
-                )
-            )
-        ]
-    )]
-    public function reject(Request $request, $requestId): JsonResponse
-    {
-        Friend::findOrFail($requestId)?->delete();
-
-        return response()->json(['message' => 'Friend request rejected.']);
-    }
-
     #[OA\Get(
         path: '/api/friends/list',
         description: 'Get a list of users friends.',
@@ -293,11 +130,237 @@ class FriendController extends BaseController
             )
         ]
     )]
-    public function requests(Request $request, FriendService $friendRequestService): JsonResponse
+    public function requests(Request $request, FriendService $friendService): JsonResponse
     {
-        $pendingRequests = $friendRequestService->getPendingRequests(auth()->user());
+        $pendingRequests = $friendService->getPendingRequests(auth()->user());
 
         return PaginatedResponse::format($pendingRequests, FriendRequestResource::class);
+    }
+
+    #[OA\Post(
+        path: '/api/friends/send-request',
+        description: 'Send a friend request to a user.',
+        summary: 'Send friend request',
+        security: [['sanctum' => []]],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['user_id'],
+                properties: [
+                    new OA\Property(
+                        property: 'user_id',
+                        description: 'ID of the user to send a friend request to',
+                        type: 'integer',
+                        example: 1
+                    ),
+                ]
+            )
+        ),
+        tags: ['Friends'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Friend request sent successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Friend request sent.')
+                    ]
+                )
+            ),
+
+            new OA\Response(
+                response: 400,
+                description: 'Bad Request',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Friend request already exists.')
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: 'Unauthorized',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.')
+                    ]
+                )
+            )
+        ]
+    )]
+    public function send(SendFriendRequestRequest $request, FriendService $friendService): JsonResponse
+    {
+        if(!$friendService->sendFriendRequest(auth()->user(), $request->get('user_id')))
+        {
+            return response()->json(['message' => 'Friend request already exists.'], 400);
+        }
+
+        return response()->json(['message' => 'Friend request sent.']);
+    }
+
+    #[OA\Patch(
+        path: '/api/friends/accept-request/{friend_request}',
+        description: 'Accept a pending friend request.',
+        summary: 'Accept friend request',
+        security: [['sanctum' => []]],
+        tags: ['Friends'],
+        parameters: [
+            new OA\Parameter(
+                name: 'friend_request',
+                description: 'ID of the friend request to be accepted.',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'integer', example: 1)
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Friend request accepted successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Friend request accepted.')
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Bad request - friend request already accepted or not pending',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Invalid request or already accepted.')
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: 'Unauthorized',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.')
+                    ]
+                )
+            )
+        ]
+    )]
+    public function accept(Request $request, $requestId, FriendService $friendService): JsonResponse
+    {
+        $friendRequest = Friend::findOrFail($requestId);
+        if(!$friendService->acceptFriendRequest($friendRequest))
+        {
+            return response()->json(['message' => 'Error occured.'], 400);
+        }
+
+        return response()->json(['message' => 'Friend request accepted.']);
+    }
+
+    #[OA\Delete(
+        path: '/api/friends/reject-request/{friend_request}',
+        description: 'ID of the friend request to be rejected.',
+        summary: 'Reject friend request',
+        security: [['sanctum' => []]],
+        tags: ['Friends'],
+        parameters: [
+            new OA\Parameter(
+                name: 'friend_request',
+                description: 'ID of the user whose friend request is to be rejected',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'integer', example: 1)
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Friend request rejected successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Friend request rejected.')
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Bad request - friend request already rejected or invalid',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Invalid request or already rejected.')
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: 'Unauthorized',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.')
+                    ]
+                )
+            )
+        ]
+    )]
+    public function reject(Request $request, $requestId): JsonResponse
+    {
+        Friend::findOrFail($requestId)?->delete();
+
+        return response()->json(['message' => 'Friend request rejected.']);
+    }
+
+
+
+    #[OA\Delete(
+        path: '/api/friends/delete/{friend_id}',
+        description: 'ID of the friend to be deleted.',
+        summary: 'Delete friend',
+        security: [['sanctum' => []]],
+        tags: ['Friends'],
+        parameters: [
+            new OA\Parameter(
+                name: 'friend_id',
+                description: 'ID of the friend to delete',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'integer', example: 1)
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Friend deleted successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Friend deleted successfully.')
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Friend does not exist.',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Friend does not exist.')
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: 'Unauthorized',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.')
+                    ]
+                )
+            )
+        ]
+    )]
+    public function delete(Request $request, $friendId, FriendService $friendService): JsonResponse
+    {
+        if($friendService->deleteFriend($friendId))
+        {
+            return response()->json(['message' => 'Friend deleted successfully.']);
+        }
+
+        return response()->json(['message' => 'Friend does not exist.'], 404);
     }
 
 }

@@ -13,9 +13,12 @@ class FriendService extends ModelService
         return Friend::class;
     }
 
-    public function sendFriendRequest(User $sender, User $receiver): ?Friend
+    public function sendFriendRequest(User $sender, int $receiverId): ?Friend
     {
-        if(!$this->checkIfRequestExists($sender, $receiver)) {
+        $receiver = User::find($receiverId);
+
+        if(!$this->checkIfRequestExists($sender, $receiver))
+        {
             $friendRequest = $this->getModel()->newInstance();
 
             $friendRequest->setAttribute('sender_id', $sender->id);
@@ -32,9 +35,29 @@ class FriendService extends ModelService
 
     public function acceptFriendRequest(Friend $friendRequest): bool
     {
-        if($friendRequest->status === FriendStatus::REQUEST_PENDING) {
+        if($friendRequest->status === FriendStatus::REQUEST_PENDING)
+        {
             $friendRequest->setAttribute('status', FriendStatus::REQUEST_ACCEPTED);
             $friendRequest->save();
+            return true;
+        }
+        return false;
+    }
+
+    public function deleteFriend(int $friendId): bool
+    {
+        $user = auth()->user();
+
+        $friend = $this->getModel()
+            ->where(function($query) use ($user, $friendId) {
+                $query->where('sender_id', $user->id)->where('receiver_id', $friendId);
+            })->orWhere(function($query) use ($user, $friendId) {
+                $query->where('sender_id', $friendId)->where('receiver_id', $user->id);
+            })->where('status', FriendStatus::REQUEST_ACCEPTED)->first();
+
+        if($friend)
+        {
+            $friend->delete();
             return true;
         }
         return false;
@@ -53,9 +76,9 @@ class FriendService extends ModelService
     {
         return $this->getModel()
             ->where(function($query) use ($sender, $receiver) {
-                $query->where('sender_id', $sender->id)->orWhere('receiver_id', $receiver->id);
+                $query->where('sender_id', $sender->id)->where('receiver_id', $receiver->id);
             })->orWhere(function($query) use ($sender, $receiver) {
-                $query->where('sender_id', $sender->id)->orWhere('receiver_id', $receiver->id);
+                $query->where('sender_id', $receiver->id)->where('receiver_id', $sender->id);
             })->exists();
     }
 }

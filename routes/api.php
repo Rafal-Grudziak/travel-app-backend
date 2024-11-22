@@ -16,29 +16,29 @@ Route::prefix('/auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::prefix('/users')->name('users.')->group(function () {
-        Route::get('/me', [UserController::class, 'show'])->name('me');
-        Route::patch('/me/update-password', [UserController::class, 'updatePassword'])->name('update_password');
+    Route::prefix('/users')->group(function () {
+        Route::get('/me', [UserController::class, 'show']);
+        Route::patch('/me/update-password', [UserController::class, 'updatePassword']);
     });
 
-    Route::prefix('/profiles')->name('profiles.')->group(function () {
-        Route::get('/search', [ProfileController::class, 'search'])->name('search');
-        Route::get('/{user}', [ProfileController::class, 'show'])->name('show');
-        Route::put('/{user}/update', [ProfileController::class, 'update'])->name('update');
+    Route::prefix('/profiles')->group(function () {
+        Route::get('/search', [ProfileController::class, 'search']);
+        Route::get('/{user}', [ProfileController::class, 'show']);
+        Route::put('/{user}/update', [ProfileController::class, 'update']);
     });
 
-    Route::prefix('/friends')->name('friends.')->group(function () {
-        Route::post('/send-request/{receiverId}', [FriendController::class, 'send'])->name('send_request');
-        Route::post('/accept-request/{requestId}', [FriendController::class, 'accept'])->name('accept_request');
-        Route::post('/reject-request/{requestId}', [FriendController::class, 'reject'])->name('reject_request');
-        Route::get('/list', [FriendController::class, 'list'])->name('list')->name('list');
-        Route::get('/requests', [FriendController::class, 'requests'])->name('requests');
-
+    Route::prefix('/friends')->group(function () {
+        Route::get('/list', [FriendController::class, 'list'])->name('list');
+        Route::get('/requests', [FriendController::class, 'requests']);
+        Route::post('/send-request', [FriendController::class, 'send']);
+        Route::delete('/delete/{friendId}', [FriendController::class, 'delete']);
+        Route::patch('/accept-request/{requestId}', [FriendController::class, 'accept']);
+        Route::delete('/reject-request/{requestId}', [FriendController::class, 'reject']);
     });
 
-    Route::prefix('/enums')->name('enums.')->group(function () {
-        Route::get('/travel-preferences', [EnumController::class, 'getTravelPreferences'])->name('travel_preferences');
-        Route::get('/travel-categories', [EnumController::class, 'getTravelCategories'])->name('travel_categories');
+    Route::prefix('/enums')->group(function () {
+        Route::get('/travel-preferences', [EnumController::class, 'getTravelPreferences']);
+        Route::get('/travel-categories', [EnumController::class, 'getTravelCategories']);
     });
 
 });
