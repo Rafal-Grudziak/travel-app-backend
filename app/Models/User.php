@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Enums\FriendStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -83,6 +84,11 @@ class User extends Authenticatable
     public function friends(): MergedRelation
     {
         return $this->mergedRelationWithModel(User::class, 'friends_view');
+    }
+
+    public function travels(): HasMany
+    {
+        return $this->hasMany(Travel::class);
     }
 
     public function getFriendshipStatus(): int

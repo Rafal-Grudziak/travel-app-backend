@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\DTOs\ProfileSearchDto;
-use App\Http\DTOs\ProfileUpdateDto;
-use App\Http\Requests\ProfileSearchRequest;
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\DTOs\ProfileSearchDTO;
+use App\Http\DTOs\ProfileUpdateDTO;
+use App\Http\Requests\Profile\ProfileSearchRequest;
+use App\Http\Requests\Profile\ProfileUpdateRequest;
 use App\Http\Resources\ProfileListResource;
 use App\Http\Resources\ProfileResource;
 use App\Http\Responses\PaginatedResponse;
@@ -197,7 +197,7 @@ class ProfileController extends BaseController
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        $dto = new ProfileUpdateDto(...$request->validated());
+        $dto = new ProfileUpdateDTO(...$request->validated());
         $updatedUser = $profileService->updateProfile($user, $dto);
 
         return response()->json(new ProfileResource($updatedUser));
@@ -273,7 +273,7 @@ class ProfileController extends BaseController
     )]
     public function search(ProfileSearchRequest $request, ProfileService $profileService): JsonResponse
     {
-        $dto = new ProfileSearchDto(...$request->validated());
+        $dto = new ProfileSearchDTO(...$request->validated());
         $results = $profileService->search($dto);
 
         return PaginatedResponse::format($results, ProfileListResource::class);

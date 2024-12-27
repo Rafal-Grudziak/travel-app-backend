@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Http\DTOs\ProfileSearchDto;
-use App\Http\DTOs\ProfileUpdateDto;
+use App\Http\DTOs\ProfileSearchDTO;
+use App\Http\DTOs\ProfileUpdateDTO;
 use App\Http\Resources\ProfileBasicResource;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,7 +16,7 @@ class ProfileService extends ModelService
         return User::class;
     }
 
-    public function updateProfile(User $user, ProfileUpdateDto $dto): User
+    public function updateProfile(User $user, ProfileUpdateDTO $dto): User
     {
 
         $user = $this->setUserValues($user, $dto);
@@ -33,7 +33,7 @@ class ProfileService extends ModelService
 //            ->paginate(10);
 //    }
 
-    public function search(ProfileSearchDto $dto): LengthAwarePaginator
+    public function search(ProfileSearchDTO $dto): LengthAwarePaginator
     {
         $userId = auth()->id();
 
@@ -54,7 +54,7 @@ class ProfileService extends ModelService
         return $results;
     }
 
-    private function setUserValues(User $user, ProfileUpdateDto $dto): User
+    private function setUserValues(User $user, ProfileUpdateDTO $dto): User
     {
         $user->fill([
             'email' => $dto->email,
