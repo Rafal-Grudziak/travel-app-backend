@@ -1460,6 +1460,42 @@
                                         "type": "number",
                                         "format": "float",
                                         "example": -102.552784
+                                    },
+                                    "places": {
+                                        "description": "List of places visited during the travel",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "name": {
+                                                    "description": "Name of the place",
+                                                    "type": "string",
+                                                    "example": "Mount Everest Base Camp"
+                                                },
+                                                "description": {
+                                                    "description": "Description of the place",
+                                                    "type": "string",
+                                                    "example": "Base camp for Mount Everest climbers"
+                                                },
+                                                "category_id": {
+                                                    "description": "Category ID of the place",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "longitude": {
+                                                    "description": "Longitude of the place",
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 86.925026
+                                                },
+                                                "latitude": {
+                                                    "description": "Latitude of the place",
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 27.988056
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
                                     }
                                 },
                                 "type": "object"
@@ -1517,6 +1553,47 @@
                                             "description": "Whether the travel is marked as favourite",
                                             "type": "boolean",
                                             "example": true
+                                        },
+                                        "places": {
+                                            "description": "List of places visited during the travel",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ID of the place",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "description": "Name of the place",
+                                                        "type": "string",
+                                                        "example": "Mount Everest Base Camp"
+                                                    },
+                                                    "description": {
+                                                        "description": "Description of the place",
+                                                        "type": "string",
+                                                        "example": "Base camp for Mount Everest climbers"
+                                                    },
+                                                    "category": {
+                                                        "description": "Category of the place",
+                                                        "type": "String",
+                                                        "example": "Mountains"
+                                                    },
+                                                    "longitude": {
+                                                        "description": "Longitude of the place",
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 86.925026
+                                                    },
+                                                    "latitude": {
+                                                        "description": "Latitude of the place",
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 27.988056
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
                                         },
                                         "created": {
                                             "description": "Record creation",
@@ -1647,6 +1724,47 @@
                                         "type": "number",
                                         "format": "float",
                                         "example": -102.552784
+                                    },
+                                    "places": {
+                                        "description": "List of places visited during the travel",
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "Id of the place",
+                                                    "type": "integer",
+                                                    "example": "1"
+                                                },
+                                                "name": {
+                                                    "description": "Name of the place",
+                                                    "type": "string",
+                                                    "example": "Mount Everest Base Camp"
+                                                },
+                                                "description": {
+                                                    "description": "Description of the place",
+                                                    "type": "string",
+                                                    "example": "Base camp for Mount Everest climbers"
+                                                },
+                                                "category_id": {
+                                                    "description": "Category ID of the place",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "longitude": {
+                                                    "description": "Longitude of the place",
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 86.925026
+                                                },
+                                                "latitude": {
+                                                    "description": "Latitude of the place",
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 27.988056
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
                                     }
                                 },
                                 "type": "object"

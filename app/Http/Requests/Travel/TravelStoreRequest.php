@@ -20,7 +20,12 @@ class TravelStoreRequest extends FormRequest
             'to' => ['required', 'date', 'after:from'],
             'longitude' => ['required', 'numeric'],
             'latitude' => ['required', 'numeric'],
-            'favourite' => ['sometimes', 'boolean'],
+            'places' => ['sometimes'],
+            'places.*.name' => ['required', 'string', 'max:127'],
+            'places.*.description' => ['nullable', 'string', 'max:255'],
+            'places.*.category_id' => ['required', 'exists:travel_categories,id'],
+            'places.*.longitude' => ['required', 'numeric'],
+            'places.*.latitude' => ['required', 'numeric'],
         ];
     }
 }

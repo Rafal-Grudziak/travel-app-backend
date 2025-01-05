@@ -8,7 +8,7 @@ use App\Http\Requests\Travel\TravelDeleteRequest;
 use App\Http\Requests\Travel\TravelShowRequest;
 use App\Http\Requests\Travel\TravelStoreRequest;
 use App\Http\Requests\Travel\TravelUpdateRequest;
-use App\Http\Resources\TravelResource;
+use App\Http\Resources\TravelShowResource;
 use App\Http\Responses\PaginatedResponse;
 use App\Models\Friend;
 use App\Models\Travel;
@@ -112,7 +112,7 @@ class TravelController extends BaseController
     )]
     public function show(TravelShowRequest $request, Travel $travel): JsonResponse
     {
-        return response()->json(new TravelResource($travel));
+        return response()->json(new TravelShowResource($travel));
     }
 
 
@@ -136,6 +136,21 @@ class TravelController extends BaseController
                         new OA\Property(property: 'to', description: 'End date of the travel', type: 'string', format: 'date', example: '2024-12-10'),
                         new OA\Property(property: 'longitude', description: 'Longitude of the location', type: 'number', format: 'float', example: 23.634501),
                         new OA\Property(property: 'latitude', description: 'Latitude of the location', type: 'number', format: 'float', example: -102.552784),
+                        new OA\Property(
+                            property: 'places',
+                            description: 'List of places visited during the travel',
+                            type: 'array',
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
+                                    new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
+                                    new OA\Property(property: 'category_id', description: 'Category ID of the place', type: 'integer', example: 1),
+                                    new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
+                                    new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
+                                ],
+                                type: 'object'
+                            )
+                        )
                     ]
                 )
             )
@@ -155,6 +170,22 @@ class TravelController extends BaseController
                         new OA\Property(property: 'longitude', description: 'Longitude of the location', type: 'number', format: 'float', example: 23.634501),
                         new OA\Property(property: 'latitude', description: 'Latitude of the location', type: 'number', format: 'float', example: -102.552784),
                         new OA\Property(property: 'favourite', description: 'Whether the travel is marked as favourite', type: 'boolean', example: true),
+                        new OA\Property(
+                            property: 'places',
+                            description: 'List of places visited during the travel',
+                            type: 'array',
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: 'id', description: 'ID of the place', type: 'integer', example: 1),
+                                    new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
+                                    new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
+                                    new OA\Property(property: 'category', description: 'Category of the place', type: 'String', example: "Mountains"),
+                                    new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
+                                    new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
+                                ],
+                                type: 'object'
+                            )
+                        ),
                         new OA\Property(property: 'created', description: 'Record creation', type: 'string', example: 'One minute ago'),
                     ]
                 )
@@ -195,9 +226,10 @@ class TravelController extends BaseController
     public function store(TravelStoreRequest $request, TravelService $travelService): JsonResponse
     {
         $dto = new TravelStoreDTO(...$request->validated());
+
         $createdTravel = $travelService->storeTravel($dto);
 
-        return response()->json(new TravelResource($createdTravel));
+        return response()->json(new TravelShowResource($createdTravel));
     }
 
     #[OA\Put(
@@ -218,6 +250,22 @@ class TravelController extends BaseController
                         new OA\Property(property: 'to', description: 'End date of the travel', type: 'string', format: 'date', example: '2024-12-10'),
                         new OA\Property(property: 'longitude', description: 'Longitude of the location', type: 'number', format: 'float', example: 23.634501),
                         new OA\Property(property: 'latitude', description: 'Latitude of the location', type: 'number', format: 'float', example: -102.552784),
+                        new OA\Property(
+                            property: 'places',
+                            description: 'List of places visited during the travel',
+                            type: 'array',
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: 'id', description: 'Id of the place', type: 'integer', example: '1'),
+                                    new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
+                                    new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
+                                    new OA\Property(property: 'category_id', description: 'Category ID of the place', type: 'integer', example: 1),
+                                    new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
+                                    new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
+                                ],
+                                type: 'object'
+                            )
+                        )
                     ]
                 )
             )
@@ -246,6 +294,22 @@ class TravelController extends BaseController
                         new OA\Property(property: 'longitude', description: 'Longitude of the location', type: 'number', format: 'float', example: 23.634501),
                         new OA\Property(property: 'latitude', description: 'Latitude of the location', type: 'number', format: 'float', example: -102.552784),
                         new OA\Property(property: 'favourite', description: 'Whether the travel is marked as favourite', type: 'boolean', example: true),
+                        new OA\Property(
+                            property: 'places',
+                            description: 'List of places visited during the travel',
+                            type: 'array',
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: 'id', description: 'ID of the place', type: 'integer', example: 1),
+                                    new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
+                                    new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
+                                    new OA\Property(property: 'category', description: 'Category of the place', type: 'String', example: "Mountains"),
+                                    new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
+                                    new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
+                                ],
+                                type: 'object'
+                            )
+                        ),
                         new OA\Property(property: 'created', description: 'Record creation', type: 'string', example: 'One minute ago'),
                     ]
                 )
@@ -288,7 +352,7 @@ class TravelController extends BaseController
         $dto = new TravelStoreDTO(...$request->validated());
         $updatedTravel = $travelService->updateTravel($dto, $travel);
 
-        return response()->json(new TravelResource($updatedTravel));
+        return response()->json(new TravelShowResource($updatedTravel));
     }
 
     #[OA\Delete(

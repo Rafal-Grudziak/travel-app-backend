@@ -5,9 +5,14 @@ namespace App\Services;
 use App\Http\DTOs\TravelStoreDTO;
 use App\Models\Travel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class TravelService extends ModelService
 {
+    public function __construct(protected PlaceService $placeService)
+    {
+    }
+
 
     protected function getModelClass(): string
     {
@@ -26,7 +31,12 @@ class TravelService extends ModelService
         $travel = $this->getModel()->newInstance();
         $travel = $this->setTravelValues($travel, $dto);
         $travel->user_id = auth()->id();
+        $travel->favourite = false;
         $travel->save();
+
+        foreach ($dto->places ?? [] as $place) {
+            $this->placeService->store($travel, $place);
+        }
 
         return $travel;
     }
@@ -35,6 +45,8 @@ class TravelService extends ModelService
     {
         $travel = $this->setTravelValues($travel, $dto);
         $travel->save();
+
+        $this->handlePlaces($travel, $dto->places);
 
         return $travel;
     }
@@ -60,5 +72,19 @@ class TravelService extends ModelService
 
         return $travel;
     }
+
+    protected function handlePlaces(Travel $travel, Collection $places): void
+    {
+        $travel->places()->whereNotIn('id', $places->pluck('id')->filter(fn ($item) => $item !== null))->delete();
+
+        foreach ($places->whereNotNull('id') as $place) {
+            $travelCondition = $this->placeService->update($place, $travel->places()->find($place->id));
+        }
+
+        foreach ($places->whereNull('id') as $place) {
+            $travelCondition = $this->placeService->store($travel, $place);
+        }
+    }
+
 
 }
