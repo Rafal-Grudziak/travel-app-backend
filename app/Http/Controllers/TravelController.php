@@ -438,15 +438,34 @@ class TravelController extends BaseController
                     type: 'array',
                     items: new OA\Items(
                         properties: [
-                            new OA\Property(property: 'id', description: 'ID of the travel', type: 'integer', example: 1),
-                            new OA\Property(property: 'name', description: 'Name of the travel', type: 'string', example: 'Mountain Adventure'),
-                            new OA\Property(property: 'description', description: 'Description of the travel', type: 'string', example: 'A trip to explore the mountains'),
-                            new OA\Property(property: 'from', description: 'Start date of the travel', type: 'string', format: 'date', example: '2024-12-01'),
-                            new OA\Property(property: 'to', description: 'End date of the travel', type: 'string', format: 'date', example: '2024-12-10'),
-                            new OA\Property(property: 'longitude', description: 'Longitude of the location', type: 'number', format: 'float', example: 23.634501),
-                            new OA\Property(property: 'latitude', description: 'Latitude of the location', type: 'number', format: 'float', example: -102.552784),
-                            new OA\Property(property: 'favourite', description: 'Whether the travel is marked as favourite', type: 'boolean', example: true),
-                            new OA\Property(property: 'created', description: 'Record creation', type: 'string', example: 'One minute ago'),
+                            new OA\Property(
+                                property: 'data',
+                                type: 'array',
+                                items: new OA\Items(
+                                    properties: [
+                                        new OA\Property(property: 'id', description: 'ID of the travel', type: 'integer', example: 1),
+                                        new OA\Property(property: 'name', description: 'Name of the travel', type: 'string', example: 'Mountain Adventure'),
+                                        new OA\Property(property: 'description', description: 'Description of the travel', type: 'string', example: 'A trip to explore the mountains'),
+                                        new OA\Property(property: 'from', description: 'Start date of the travel', type: 'string', format: 'date', example: '2024-12-01'),
+                                        new OA\Property(property: 'to', description: 'End date of the travel', type: 'string', format: 'date', example: '2024-12-10'),
+                                        new OA\Property(property: 'longitude', description: 'Longitude of the location', type: 'number', format: 'float', example: 23.634501),
+                                        new OA\Property(property: 'latitude', description: 'Latitude of the location', type: 'number', format: 'float', example: -102.552784),
+                                        new OA\Property(property: 'favourite', description: 'Whether the travel is marked as favourite', type: 'boolean', example: true),
+                                        new OA\Property(property: 'created', description: 'Record creation', type: 'string', example: 'One minute ago'),
+                                    ],
+                                    type: 'object'
+                                )
+                            ),
+                            new OA\Property(
+                                property: 'meta',
+                                properties: [
+                                    new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                                    new OA\Property(property: 'last_page', type: 'integer', example: 5),
+                                    new OA\Property(property: 'per_page', type: 'integer', example: 10),
+                                    new OA\Property(property: 'total', type: 'integer', example: 50),
+                                ],
+                                type: 'object'
+                            ),
                         ]
                     )
                 )
