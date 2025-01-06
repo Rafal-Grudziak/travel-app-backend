@@ -95,6 +95,21 @@ class TravelController extends BaseController
                         new OA\Property(property: 'longitude', description: 'Longitude of the location', type: 'number', format: 'float', example: 23.634501),
                         new OA\Property(property: 'latitude', description: 'Latitude of the location', type: 'number', format: 'float', example: -102.552784),
                         new OA\Property(property: 'favourite', description: 'Whether the travel is marked as favourite', type: 'boolean', example: true),
+                    new OA\Property(
+                        property: 'places',
+                        description: 'List of places visited during the travel',
+                        type: 'array',
+                        items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
+                            new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
+                            new OA\Property(property: 'category_id', description: 'Category ID of the place', type: 'integer', example: 1),
+                            new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
+                            new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
+                        ],
+                        type: 'object'
+                        )
+                    ),
                         new OA\Property(property: 'created', description: 'Record creation', type: 'string', example: 'One minute ago'),
                     ]
                 )
