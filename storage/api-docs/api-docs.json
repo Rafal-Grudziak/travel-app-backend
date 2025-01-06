@@ -1321,7 +1321,7 @@
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Travel returned successfully",
                         "content": {
                             "application/json": {
@@ -1540,7 +1540,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Travel created successfully",
                         "content": {
                             "application/json": {
@@ -1809,7 +1809,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Travel updated successfully",
                         "content": {
                             "application/json": {
@@ -2044,10 +2044,20 @@
                             "type": "integer",
                             "example": 1
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Select page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Travel returned successfully",
                         "content": {
                             "application/json": {
@@ -2055,54 +2065,83 @@
                                     "type": "array",
                                     "items": {
                                         "properties": {
-                                            "id": {
-                                                "description": "ID of the travel",
-                                                "type": "integer",
-                                                "example": 1
+                                            "data": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "ID of the travel",
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "description": "Name of the travel",
+                                                            "type": "string",
+                                                            "example": "Mountain Adventure"
+                                                        },
+                                                        "description": {
+                                                            "description": "Description of the travel",
+                                                            "type": "string",
+                                                            "example": "A trip to explore the mountains"
+                                                        },
+                                                        "from": {
+                                                            "description": "Start date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-01"
+                                                        },
+                                                        "to": {
+                                                            "description": "End date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-10"
+                                                        },
+                                                        "longitude": {
+                                                            "description": "Longitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 23.634501
+                                                        },
+                                                        "latitude": {
+                                                            "description": "Latitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": -102.552784
+                                                        },
+                                                        "favourite": {
+                                                            "description": "Whether the travel is marked as favourite",
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        },
+                                                        "created": {
+                                                            "description": "Record creation",
+                                                            "type": "string",
+                                                            "example": "One minute ago"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
                                             },
-                                            "name": {
-                                                "description": "Name of the travel",
-                                                "type": "string",
-                                                "example": "Mountain Adventure"
-                                            },
-                                            "description": {
-                                                "description": "Description of the travel",
-                                                "type": "string",
-                                                "example": "A trip to explore the mountains"
-                                            },
-                                            "from": {
-                                                "description": "Start date of the travel",
-                                                "type": "string",
-                                                "format": "date",
-                                                "example": "2024-12-01"
-                                            },
-                                            "to": {
-                                                "description": "End date of the travel",
-                                                "type": "string",
-                                                "format": "date",
-                                                "example": "2024-12-10"
-                                            },
-                                            "longitude": {
-                                                "description": "Longitude of the location",
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": 23.634501
-                                            },
-                                            "latitude": {
-                                                "description": "Latitude of the location",
-                                                "type": "number",
-                                                "format": "float",
-                                                "example": -102.552784
-                                            },
-                                            "favourite": {
-                                                "description": "Whether the travel is marked as favourite",
-                                                "type": "boolean",
-                                                "example": true
-                                            },
-                                            "created": {
-                                                "description": "Record creation",
-                                                "type": "string",
-                                                "example": "One minute ago"
+                                            "meta": {
+                                                "properties": {
+                                                    "current_page": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "last_page": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    },
+                                                    "per_page": {
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    },
+                                                    "total": {
+                                                        "type": "integer",
+                                                        "example": 50
+                                                    }
+                                                },
+                                                "type": "object"
                                             }
                                         },
                                         "type": "object"
@@ -2155,7 +2194,7 @@
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Travel updated successfully",
                         "content": {
                             "application/json": {
