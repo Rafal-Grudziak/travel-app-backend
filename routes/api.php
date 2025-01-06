@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [TravelController::class, 'index']);
         Route::post('/', [TravelController::class, 'store']);
         Route::get('/{travel}', [TravelController::class, 'show']);
+        Route::get('/user/{user}', [TravelController::class, 'usersTravels']);
         Route::put('/{travel}/update', [TravelController::class, 'update']);
         Route::delete('/{travel}/delete', [TravelController::class, 'destroy']);
         Route::patch('/{travel}/toggle-favourite', [TravelController::class, 'toggleFavourite']);

@@ -1371,6 +1371,42 @@
                                             "type": "boolean",
                                             "example": true
                                         },
+                                        "places": {
+                                            "description": "List of places visited during the travel",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "name": {
+                                                        "description": "Name of the place",
+                                                        "type": "string",
+                                                        "example": "Mount Everest Base Camp"
+                                                    },
+                                                    "description": {
+                                                        "description": "Description of the place",
+                                                        "type": "string",
+                                                        "example": "Base camp for Mount Everest climbers"
+                                                    },
+                                                    "category_id": {
+                                                        "description": "Category ID of the place",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "longitude": {
+                                                        "description": "Longitude of the place",
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 86.925026
+                                                    },
+                                                    "latitude": {
+                                                        "description": "Latitude of the place",
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 27.988056
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
                                         "created": {
                                             "description": "Record creation",
                                             "type": "string",
@@ -1823,6 +1859,47 @@
                                             "type": "boolean",
                                             "example": true
                                         },
+                                        "places": {
+                                            "description": "List of places visited during the travel",
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ID of the place",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "description": "Name of the place",
+                                                        "type": "string",
+                                                        "example": "Mount Everest Base Camp"
+                                                    },
+                                                    "description": {
+                                                        "description": "Description of the place",
+                                                        "type": "string",
+                                                        "example": "Base camp for Mount Everest climbers"
+                                                    },
+                                                    "category": {
+                                                        "description": "Category of the place",
+                                                        "type": "String",
+                                                        "example": "Mountains"
+                                                    },
+                                                    "longitude": {
+                                                        "description": "Longitude of the place",
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 86.925026
+                                                    },
+                                                    "latitude": {
+                                                        "description": "Latitude of the place",
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 27.988056
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
                                         "created": {
                                             "description": "Record creation",
                                             "type": "string",
@@ -1940,6 +2017,115 @@
                     },
                     "404": {
                         "description": "Travel not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/travels/user/{user}": {
+            "get": {
+                "tags": [
+                    "Travels"
+                ],
+                "summary": "Show travels of specified user",
+                "description": "Show travels of specified user.",
+                "operationId": "735ec3f11f6264d5c55e7338931777fb",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Travel returned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID of the travel",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "description": "Name of the travel",
+                                                "type": "string",
+                                                "example": "Mountain Adventure"
+                                            },
+                                            "description": {
+                                                "description": "Description of the travel",
+                                                "type": "string",
+                                                "example": "A trip to explore the mountains"
+                                            },
+                                            "from": {
+                                                "description": "Start date of the travel",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2024-12-01"
+                                            },
+                                            "to": {
+                                                "description": "End date of the travel",
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2024-12-10"
+                                            },
+                                            "longitude": {
+                                                "description": "Longitude of the location",
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 23.634501
+                                            },
+                                            "latitude": {
+                                                "description": "Latitude of the location",
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": -102.552784
+                                            },
+                                            "favourite": {
+                                                "description": "Whether the travel is marked as favourite",
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "created": {
+                                                "description": "Record creation",
+                                                "type": "string",
+                                                "example": "One minute ago"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
