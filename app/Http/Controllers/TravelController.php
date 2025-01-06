@@ -428,7 +428,14 @@ class TravelController extends BaseController
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'integer', example: 1)
-            )
+            ),
+            new OA\Parameter(
+                name: 'page',
+                description: 'Select page',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer', example: '')
+            ),
         ],
         responses: [
             new OA\Response(
