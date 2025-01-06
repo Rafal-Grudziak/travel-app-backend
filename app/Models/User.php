@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
 use Staudenmeir\LaravelMergedRelations\Eloquent\Relations\MergedRelation;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -121,5 +122,15 @@ class User extends Authenticatable
         return Friend::where('sender_id', $this->id)
             ->where('receiver_id', $user->id)
             ->first()?->id;
+    }
+
+    public function getFriendsTravels(): Builder
+    {
+        $friendIds = $this->friends()->pluck('id');
+
+        return Travel::query()
+            ->with(['user'])
+            ->whereIn('user_id', $friendIds)
+            ->latest();
     }
 }

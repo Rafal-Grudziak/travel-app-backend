@@ -440,7 +440,7 @@ class TravelController extends BaseController
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Travel returned successfully',
+                description: 'Travels returned successfully',
                 content: new OA\JsonContent(
                     type: 'array',
                     items: new OA\Items(
