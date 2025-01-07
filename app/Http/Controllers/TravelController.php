@@ -106,7 +106,15 @@ class TravelController extends BaseController
                         properties: [
                             new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
                             new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
-                            new OA\Property(property: 'category_id', description: 'Category ID of the place', type: 'integer', example: 1),
+                            new OA\Property(
+                                property: 'category',
+                                description: 'Category of the place',
+                                properties: [
+                                    new OA\Property(property: 'id', description: 'Category ID', type: 'integer', example: 1),
+                                    new OA\Property(property: 'name', description: 'Category name', type: 'string', example: 'Mountains')
+                                ],
+                                type: 'object'
+                            ),
                             new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
                             new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
                         ],
@@ -197,7 +205,15 @@ class TravelController extends BaseController
                                     new OA\Property(property: 'id', description: 'ID of the place', type: 'integer', example: 1),
                                     new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
                                     new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
-                                    new OA\Property(property: 'category', description: 'Category of the place', type: 'String', example: "Mountains"),
+                                    new OA\Property(
+                                        property: 'category',
+                                        description: 'Category of the place',
+                                        properties: [
+                                            new OA\Property(property: 'id', description: 'Category ID', type: 'integer', example: 1),
+                                            new OA\Property(property: 'name', description: 'Category name', type: 'string', example: 'Mountains')
+                                        ],
+                                        type: 'object'
+                                    ),
                                     new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
                                     new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
                                 ],
@@ -321,7 +337,15 @@ class TravelController extends BaseController
                                     new OA\Property(property: 'id', description: 'ID of the place', type: 'integer', example: 1),
                                     new OA\Property(property: 'name', description: 'Name of the place', type: 'string', example: 'Mount Everest Base Camp'),
                                     new OA\Property(property: 'description', description: 'Description of the place', type: 'string', example: 'Base camp for Mount Everest climbers'),
-                                    new OA\Property(property: 'category', description: 'Category of the place', type: 'String', example: "Mountains"),
+                                    new OA\Property(
+                                        property: 'category',
+                                        description: 'Category of the place',
+                                        properties: [
+                                            new OA\Property(property: 'id', description: 'Category ID', type: 'integer', example: 1),
+                                            new OA\Property(property: 'name', description: 'Category name', type: 'string', example: 'Mountains')
+                                        ],
+                                        type: 'object'
+                                    ),
                                     new OA\Property(property: 'longitude', description: 'Longitude of the place', type: 'number', format: 'float', example: 86.925026),
                                     new OA\Property(property: 'latitude', description: 'Latitude of the place', type: 'number', format: 'float', example: 27.988056),
                                 ],

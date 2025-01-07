@@ -1553,10 +1553,21 @@
                                                         "type": "string",
                                                         "example": "Base camp for Mount Everest climbers"
                                                     },
-                                                    "category_id": {
-                                                        "description": "Category ID of the place",
-                                                        "type": "integer",
-                                                        "example": 1
+                                                    "category": {
+                                                        "description": "Category of the place",
+                                                        "properties": {
+                                                            "id": {
+                                                                "description": "Category ID",
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "description": "Category name",
+                                                                "type": "string",
+                                                                "example": "Mountains"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     },
                                                     "longitude": {
                                                         "description": "Longitude of the place",
@@ -1779,8 +1790,19 @@
                                                     },
                                                     "category": {
                                                         "description": "Category of the place",
-                                                        "type": "String",
-                                                        "example": "Mountains"
+                                                        "properties": {
+                                                            "id": {
+                                                                "description": "Category ID",
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "description": "Category name",
+                                                                "type": "string",
+                                                                "example": "Mountains"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     },
                                                     "longitude": {
                                                         "description": "Longitude of the place",
@@ -2048,8 +2070,19 @@
                                                     },
                                                     "category": {
                                                         "description": "Category of the place",
-                                                        "type": "String",
-                                                        "example": "Mountains"
+                                                        "properties": {
+                                                            "id": {
+                                                                "description": "Category ID",
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "description": "Category name",
+                                                                "type": "string",
+                                                                "example": "Mountains"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     },
                                                     "longitude": {
                                                         "description": "Longitude of the place",

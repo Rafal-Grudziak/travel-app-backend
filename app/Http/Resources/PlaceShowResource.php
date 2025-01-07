@@ -19,7 +19,7 @@ class PlaceShowResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'category' => $this->category->name,
+            'category' => new EnumResource($this->category),
             'longitude' => $this->longitude,
             'latitude' => $this->latitude,
         ];
