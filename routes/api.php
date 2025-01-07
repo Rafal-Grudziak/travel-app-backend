@@ -40,19 +40,22 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/reject-request/{requestId}', [FriendController::class, 'reject']);
     });
 
-    Route::prefix('/enums')->group(function () {
-        Route::get('/travel-preferences', [EnumController::class, 'getTravelPreferences']);
-        Route::get('/travel-categories', [EnumController::class, 'getTravelCategories']);
-    });
-
     Route::prefix('/travels')->group(function () {
         Route::get('/', [TravelController::class, 'index']);
         Route::post('/', [TravelController::class, 'store']);
         Route::get('/{travel}', [TravelController::class, 'show']);
         Route::get('/user/{user}', [TravelController::class, 'usersTravels']);
+        Route::get('/user/{user}/planned', [TravelController::class, 'usersPlannedTravels']);
+        Route::get('/user/{user}/finished', [TravelController::class, 'usersFinishedTravels']);
+        Route::get('/user/{user}/favourite', [TravelController::class, 'usersFavouriteTravels']);
         Route::put('/{travel}/update', [TravelController::class, 'update']);
         Route::delete('/{travel}/delete', [TravelController::class, 'destroy']);
         Route::patch('/{travel}/toggle-favourite', [TravelController::class, 'toggleFavourite']);
+    });
+
+    Route::prefix('/enums')->group(function () {
+        Route::get('/travel-preferences', [EnumController::class, 'getTravelPreferences']);
+        Route::get('/travel-categories', [EnumController::class, 'getTravelCategories']);
     });
 
 });

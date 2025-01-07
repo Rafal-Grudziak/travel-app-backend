@@ -21,7 +21,7 @@ class TravelListRequest extends FormRequest
             return true;
         }
 
-        $owner = $user->user;
+        $owner = $user;
         $isFriend = $owner->acceptedFriendsAsSender->contains($auth)
             || $owner->acceptedFriendsAsReceiver->contains($auth);
 
