@@ -2193,6 +2193,54 @@
                 ]
             }
         },
+        "/api/travels/{travel}/toggle-favourite": {
+            "patch": {
+                "tags": [
+                    "Travels"
+                ],
+                "summary": "Toggle favourite",
+                "operationId": "5262a6e7d246f8229d3c88b16347b9c2",
+                "parameters": [
+                    {
+                        "name": "travel",
+                        "in": "path",
+                        "description": "Travel ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Travel updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "favourite": {
+                                            "description": "Whether the travel is marked as favourite",
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Travel not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/travels/user/{user}": {
             "get": {
                 "tags": [
@@ -2341,45 +2389,441 @@
                 ]
             }
         },
-        "/api/travels/{travel}/toggle-favourite": {
-            "patch": {
+        "/api/travels/user/{user}/planned": {
+            "get": {
                 "tags": [
                     "Travels"
                 ],
-                "summary": "Toggle favourite",
-                "operationId": "5262a6e7d246f8229d3c88b16347b9c2",
+                "summary": "Show planned travels of specified user",
+                "description": "Show planned travels of specified user.",
+                "operationId": "5b6d84a5ff9936d275b0009790619f11",
                 "parameters": [
                     {
-                        "name": "travel",
+                        "name": "user",
                         "in": "path",
-                        "description": "Travel ID",
+                        "description": "User ID",
                         "required": true,
                         "schema": {
                             "type": "integer",
                             "example": 1
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Select page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Travel updated successfully",
+                        "description": "Travels returned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "data": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "ID of the travel",
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "description": "Name of the travel",
+                                                            "type": "string",
+                                                            "example": "Mountain Adventure"
+                                                        },
+                                                        "description": {
+                                                            "description": "Description of the travel",
+                                                            "type": "string",
+                                                            "example": "A trip to explore the mountains"
+                                                        },
+                                                        "from": {
+                                                            "description": "Start date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-01"
+                                                        },
+                                                        "to": {
+                                                            "description": "End date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-10"
+                                                        },
+                                                        "longitude": {
+                                                            "description": "Longitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 23.634501
+                                                        },
+                                                        "latitude": {
+                                                            "description": "Latitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": -102.552784
+                                                        },
+                                                        "favourite": {
+                                                            "description": "Whether the travel is marked as favourite",
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        },
+                                                        "created": {
+                                                            "description": "Record creation",
+                                                            "type": "string",
+                                                            "example": "One minute ago"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "meta": {
+                                                "properties": {
+                                                    "current_page": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "last_page": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    },
+                                                    "per_page": {
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    },
+                                                    "total": {
+                                                        "type": "integer",
+                                                        "example": 50
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "favourite": {
-                                            "description": "Whether the travel is marked as favourite",
-                                            "type": "boolean",
-                                            "example": true
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/travels/user/{user}/finished": {
+            "get": {
+                "tags": [
+                    "Travels"
+                ],
+                "summary": "Show finished travels of specified user",
+                "description": "Show finished travels of specified user.",
+                "operationId": "6b731f8bcc16150b0d8b15fbcc25e275",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
                     },
-                    "404": {
-                        "description": "Travel not found"
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Select page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Travels returned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "data": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "ID of the travel",
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "description": "Name of the travel",
+                                                            "type": "string",
+                                                            "example": "Mountain Adventure"
+                                                        },
+                                                        "description": {
+                                                            "description": "Description of the travel",
+                                                            "type": "string",
+                                                            "example": "A trip to explore the mountains"
+                                                        },
+                                                        "from": {
+                                                            "description": "Start date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-01"
+                                                        },
+                                                        "to": {
+                                                            "description": "End date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-10"
+                                                        },
+                                                        "longitude": {
+                                                            "description": "Longitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 23.634501
+                                                        },
+                                                        "latitude": {
+                                                            "description": "Latitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": -102.552784
+                                                        },
+                                                        "favourite": {
+                                                            "description": "Whether the travel is marked as favourite",
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        },
+                                                        "created": {
+                                                            "description": "Record creation",
+                                                            "type": "string",
+                                                            "example": "One minute ago"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "meta": {
+                                                "properties": {
+                                                    "current_page": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "last_page": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    },
+                                                    "per_page": {
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    },
+                                                    "total": {
+                                                        "type": "integer",
+                                                        "example": 50
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/travels/user/{user}/favourite": {
+            "get": {
+                "tags": [
+                    "Travels"
+                ],
+                "summary": "Show favourite travels of specified user",
+                "description": "Show favourite travels of specified user.",
+                "operationId": "9f4d4fde51610be8c72e8f5065719b3b",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Select page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Travels returned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "data": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "ID of the travel",
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "description": "Name of the travel",
+                                                            "type": "string",
+                                                            "example": "Mountain Adventure"
+                                                        },
+                                                        "description": {
+                                                            "description": "Description of the travel",
+                                                            "type": "string",
+                                                            "example": "A trip to explore the mountains"
+                                                        },
+                                                        "from": {
+                                                            "description": "Start date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-01"
+                                                        },
+                                                        "to": {
+                                                            "description": "End date of the travel",
+                                                            "type": "string",
+                                                            "format": "date",
+                                                            "example": "2024-12-10"
+                                                        },
+                                                        "longitude": {
+                                                            "description": "Longitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 23.634501
+                                                        },
+                                                        "latitude": {
+                                                            "description": "Latitude of the location",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": -102.552784
+                                                        },
+                                                        "favourite": {
+                                                            "description": "Whether the travel is marked as favourite",
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        },
+                                                        "created": {
+                                                            "description": "Record creation",
+                                                            "type": "string",
+                                                            "example": "One minute ago"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "meta": {
+                                                "properties": {
+                                                    "current_page": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "last_page": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    },
+                                                    "per_page": {
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    },
+                                                    "total": {
+                                                        "type": "integer",
+                                                        "example": 50
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
