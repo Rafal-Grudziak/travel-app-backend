@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\DTOs\ProfileSearchDto;
 use App\Http\DTOs\ProfileUpdateDto;
+use App\Http\Requests\ProfileSearchRequest;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\ProfileListResource;
 use App\Http\Resources\ProfileResource;
+use App\Http\Responses\PaginatedResponse;
 use App\Models\User;
 use App\Services\ProfileService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
 
@@ -198,6 +201,82 @@ class ProfileController extends BaseController
         $updatedUser = $profileService->updateProfile($user, $dto);
 
         return response()->json(new ProfileResource($updatedUser));
+    }
+
+    #[OA\Get(
+        path: '/api/profiles/search',
+        description: 'Search for profiles.',
+        summary: 'Search profiles',
+        security: [['sanctum' => []]],
+        tags: ['Profiles'],
+        parameters: [
+            new OA\Parameter(
+                name: 'query',
+                description: 'Search query to filter profiles.',
+                in: 'query',
+                required: true,
+                schema: new OA\Schema(type: 'string', example: 'John')
+            ),
+            new OA\Parameter(
+                name: 'page',
+                description: 'Select page',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer', example: '')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Successful profiles retrieval with pagination',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: 'id', type: 'integer', example: 1),
+                                    new OA\Property(property: 'name', type: 'string', example: 'John Doe'),
+                                    new OA\Property(property: 'avatar', type: 'string', example: 'https://example.com/avatar.jpg'),
+                                    new OA\Property(property: 'bio', type: 'string', example: 'Traveler and photographer'),
+                                    new OA\Property(property: 'friend_status', type: 'integer', example: 1),
+                                    new OA\Property(property: 'received_request_id', type: 'integer', example: 1),
+                                ],
+                                type: 'object'
+                            )
+                        ),
+                        new OA\Property(
+                            property: 'meta',
+                            properties: [
+                                new OA\Property(property: 'current_page', type: 'integer', example: 1),
+                                new OA\Property(property: 'last_page', type: 'integer', example: 5),
+                                new OA\Property(property: 'per_page', type: 'integer', example: 10),
+                                new OA\Property(property: 'total', type: 'integer', example: 50),
+                            ],
+                            type: 'object'
+                        ),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: 'Unauthorized',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'Unauthenticated.'),
+                    ]
+                )
+            ),
+        ]
+    )]
+    public function search(ProfileSearchRequest $request, ProfileService $profileService): JsonResponse
+    {
+        $dto = new ProfileSearchDto(...$request->validated());
+        $results = $profileService->search($dto);
+
+        return PaginatedResponse::format($results, ProfileListResource::class);
     }
 
 }
