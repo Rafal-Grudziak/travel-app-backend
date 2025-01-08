@@ -16,12 +16,13 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'email' => 'required|email',
             'name' => 'required|max:32|unique:users,name,' . $this->user()->id,
-//            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'facebook_link' => 'nullable|url|max:128',
             'instagram_link' => 'nullable|url|max:128',
             'x_link' => 'nullable|url|max:128',
             'bio' => 'nullable|max:300',
-            'travel_preferences' => 'nullable|array|exists:travel_preferences,id',
+            'travel_preferences' => 'nullable|array',
+            'travel_preferences.*' => 'integer|exists:travel_preferences,id',
         ];
     }
 }

@@ -42,7 +42,7 @@ class ProfileController extends BaseController
                     properties: [
                         new OA\Property(property: 'id', type: 'integer', example: 1),
                         new OA\Property(property: 'name', type: 'string', example: 'John Doe'),
-                        new OA\Property(property: 'avatar', type: 'string', example: 'https://example.com/avatar.jpg'),
+                        new OA\Property(property: 'avatar', type: 'string', example: 'http://localhost/storage/avatars/gKlbUY4YuSJ4PttnzXiuf3cBTugJy5Yxqr9rd8Si.png'),
                         new OA\Property(property: 'facebook_link', type: 'string', example: 'https://facebook.com/johndoe'),
                         new OA\Property(property: 'instagram_link', type: 'string', example: 'https://instagram.com/johndoe'),
                         new OA\Property(property: 'x_link', type: 'string', example: 'https://x.com/johndoe'),
@@ -86,7 +86,7 @@ class ProfileController extends BaseController
         return response()->json(new ProfileResource($user));
     }
 
-    #[OA\Put(
+    #[OA\Post(
         path: '/api/profiles/{user}/update',
         description: 'Allows updating the user\'s profile including email, name, avatar, bio, and social media links.',
         summary: 'Update user\'s profile',
@@ -94,7 +94,7 @@ class ProfileController extends BaseController
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\MediaType(
-                mediaType: 'application/json',
+                mediaType: 'multipart/form-data',
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'email', type: 'string', example: 'user@example.com'),
@@ -104,7 +104,12 @@ class ProfileController extends BaseController
                         new OA\Property(property: 'instagram_link', type: 'string', example: 'https://instagram.com/johndoe'),
                         new OA\Property(property: 'x_link', type: 'string', example: 'https://x.com/johndoe'),
                         new OA\Property(property: 'bio', type: 'string', example: 'Traveler and photographer'),
-                        new OA\Property(property: 'travel_preferences', type: 'array', items: new OA\Items(type: 'string'), example: ['2', '3']),
+                        new OA\Property(
+                            property: 'travel_preferences',
+                            type: 'array',
+                            items: new OA\Items(type: 'integer'),
+                            example: ['2', '3']
+                        ),
                     ]
                 )
             )
@@ -127,7 +132,7 @@ class ProfileController extends BaseController
                     properties: [
                         new OA\Property(property: 'id', type: 'integer', example: 1),
                         new OA\Property(property: 'name', type: 'string', example: 'John Doe'),
-//                        new OA\Property(property: 'avatar', type: 'string', example: 'https://example.com/avatar.jpg'),
+                        new OA\Property(property: 'avatar', type: 'string', example: 'http://localhost/storage/avatars/gKlbUY4YuSJ4PttnzXiuf3cBTugJy5Yxqr9rd8Si.png'),
                         new OA\Property(property: 'facebook_link', type: 'string', example: 'https://facebook.com/johndoe'),
                         new OA\Property(property: 'instagram_link', type: 'string', example: 'https://instagram.com/johndoe'),
                         new OA\Property(property: 'x_link', type: 'string', example: 'https://x.com/johndoe'),
@@ -238,7 +243,7 @@ class ProfileController extends BaseController
                                 properties: [
                                     new OA\Property(property: 'id', type: 'integer', example: 1),
                                     new OA\Property(property: 'name', type: 'string', example: 'John Doe'),
-                                    new OA\Property(property: 'avatar', type: 'string', example: 'https://example.com/avatar.jpg'),
+                                    new OA\Property(property: 'avatar', type: 'string', example: 'http://localhost/storage/avatars/gKlbUY4YuSJ4PttnzXiuf3cBTugJy5Yxqr9rd8Si.png'),
                                     new OA\Property(property: 'bio', type: 'string', example: 'Traveler and photographer'),
                                     new OA\Property(property: 'friend_status', type: 'integer', example: 1),
                                     new OA\Property(property: 'received_request_id', type: 'integer', example: 1),

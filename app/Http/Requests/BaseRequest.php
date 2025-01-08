@@ -11,7 +11,7 @@ class BaseRequest extends Request
 //    {
 //        return true;
 //    }
-//
+
 //    public function wantsJson(): bool
 //    {
 //        return true;

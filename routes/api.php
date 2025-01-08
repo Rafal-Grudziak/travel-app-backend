@@ -16,7 +16,7 @@ Route::prefix('/auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'api'])->group(function () {
 
     Route::get('/timeline', [TimeLineController::class, 'index']);
 
@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('/profiles')->group(function () {
         Route::get('/search', [ProfileController::class, 'search']);
         Route::get('/{user}', [ProfileController::class, 'show']);
-        Route::put('/{user}/update', [ProfileController::class, 'update']);
+        Route::post('/{user}/update', [ProfileController::class, 'update'])->middleware('api');
     });
 
     Route::prefix('/friends')->group(function () {
