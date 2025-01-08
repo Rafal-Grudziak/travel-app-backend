@@ -1041,8 +1041,7 @@
                                         "type": "array",
                                         "items": {
                                             "type": "integer"
-                                        },
-                                        "collectionFormat": "multi"
+                                        }
                                     }
                                 },
                                 "type": "object"

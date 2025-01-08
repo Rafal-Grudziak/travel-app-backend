@@ -108,7 +108,6 @@ class ProfileController extends BaseController
                             property: 'travel_preferences[]',
                             type: 'array',
                             items: new OA\Items(type: 'integer'),
-                            collectionFormat: 'multi',
                         ),
                     ]
                 )
