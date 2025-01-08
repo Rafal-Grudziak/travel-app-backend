@@ -928,11 +928,11 @@
                                                 "type": "object"
                                             }
                                         },
-                                        "trips_count": {
+                                        "finished_travels_count": {
                                             "type": "integer",
                                             "example": 3
                                         },
-                                        "planned_trips_count": {
+                                        "planned_travels_count": {
                                             "type": "integer",
                                             "example": 5
                                         }
@@ -1193,7 +1193,7 @@
                         "name": "query",
                         "in": "query",
                         "description": "Search query to filter profiles.",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "string",
                             "example": "John"
@@ -1316,6 +1316,36 @@
                         "schema": {
                             "type": "integer",
                             "example": ""
+                        }
+                    },
+                    {
+                        "name": "date_from",
+                        "in": "query",
+                        "description": "Date from filter.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "12-12-2024"
+                        }
+                    },
+                    {
+                        "name": "date_to",
+                        "in": "query",
+                        "description": "Date to filter.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "19-12-2024"
+                        }
+                    },
+                    {
+                        "name": "sort_direction",
+                        "in": "query",
+                        "description": "Sorting direction.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "asc"
                         }
                     }
                 ],

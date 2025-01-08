@@ -56,8 +56,8 @@ class ProfileController extends BaseController
                                 new OA\Property(property: 'name', type: 'string', example: 'Deserts')
                             ]),
                         ),
-                        new OA\Property(property: 'trips_count', type: 'integer', example: 3),
-                        new OA\Property(property: 'planned_trips_count', type: 'integer', example: 5),
+                        new OA\Property(property: 'finished_travels_count', type: 'integer', example: 3),
+                        new OA\Property(property: 'planned_travels_count', type: 'integer', example: 5),
                     ]
                 )
             ),
@@ -214,7 +214,7 @@ class ProfileController extends BaseController
                 name: 'query',
                 description: 'Search query to filter profiles.',
                 in: 'query',
-                required: true,
+                required: false,
                 schema: new OA\Schema(type: 'string', example: 'John')
             ),
             new OA\Parameter(

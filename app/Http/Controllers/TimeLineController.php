@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\DTOs\TimeLineIndexDTO;
+use App\Http\Requests\TimeLine\TimeLineIndexRequest;
 use App\Http\Resources\TimeLineResource;
 use App\Http\Responses\PaginatedResponse;
+use App\Services\TimeLineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
@@ -24,6 +27,27 @@ class TimeLineController extends BaseController
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(type: 'integer', example: '')
+            ),
+            new OA\Parameter(
+                name: 'date_from',
+                description: 'Date from filter.',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', example: '12-12-2024')
+            ),
+            new OA\Parameter(
+                name: 'date_to',
+                description: 'Date to filter.',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', example: '19-12-2024')
+            ),
+            new OA\Parameter(
+                name: 'sort_direction',
+                description: 'Sorting direction.',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', example: 'asc')
             ),
         ],
         responses: [
@@ -85,10 +109,12 @@ class TimeLineController extends BaseController
             )
         ]
     )]
-    public function index(Request $request): JsonResponse
+    public function index(TimeLineIndexRequest $request, TimelineService $timelineService): JsonResponse
     {
-        $travels = $request->user()->getFriendsTravels()->paginate(10);
-        return PaginatedResponse::format($travels, TimeLineResource::class);
+
+        $dto = new TimeLineIndexDTO(...$request->validated());
+        return PaginatedResponse::format($timelineService->filter($dto)->paginate(10), TimeLineResource::class);
+
     }
 
 }

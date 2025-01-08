@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class ModelService
@@ -12,5 +13,10 @@ abstract class ModelService
     {
         $modelClass = $this->getModelClass();
         return new $modelClass;
+    }
+
+    public function getModelQuery(): Builder
+    {
+        return app($this->getModelClass())->newQuery();
     }
 }
