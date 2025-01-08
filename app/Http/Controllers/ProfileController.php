@@ -105,10 +105,10 @@ class ProfileController extends BaseController
                         new OA\Property(property: 'x_link', type: 'string', example: 'https://x.com/johndoe'),
                         new OA\Property(property: 'bio', type: 'string', example: 'Traveler and photographer'),
                         new OA\Property(
-                            property: 'travel_preferences',
+                            property: 'travel_preferences[]',
                             type: 'array',
                             items: new OA\Items(type: 'integer'),
-                            example: ['2', '3']
+                            collectionFormat: 'multi',
                         ),
                     ]
                 )

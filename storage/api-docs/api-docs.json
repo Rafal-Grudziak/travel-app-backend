@@ -1005,7 +1005,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "email": {
@@ -1037,15 +1037,12 @@
                                         "type": "string",
                                         "example": "Traveler and photographer"
                                     },
-                                    "travel_preferences": {
+                                    "travel_preferences[]": {
                                         "type": "array",
                                         "items": {
                                             "type": "integer"
                                         },
-                                        "example": [
-                                            "2",
-                                            "3"
-                                        ]
+                                        "collectionFormat": "multi"
                                     }
                                 },
                                 "type": "object"
