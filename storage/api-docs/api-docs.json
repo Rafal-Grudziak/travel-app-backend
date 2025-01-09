@@ -1040,7 +1040,8 @@
                                     "travel_preferences[]": {
                                         "type": "array",
                                         "items": {
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": 1
                                         }
                                     }
                                 },
