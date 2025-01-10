@@ -25,8 +25,8 @@ class TravelShowResource extends JsonResource
             'latitude' => $this->resource->latitude,
             'favourite' => $this->resource->favourite,
             'created' => Carbon::parse($this->resource->created_at)->diffForHumans(),
-            'places' => PlaceShowResource::collection($this->resource->places),
             'images' => ImageResource::collection($this->resource->images),
+            'places' => PlaceShowResource::collection($this->resource->places),
         ];
     }
 }
