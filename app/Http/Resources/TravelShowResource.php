@@ -16,16 +16,17 @@ class TravelShowResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'from' => $this->from->format('Y-m-d'),
-            'to' => $this->to->format('Y-m-d'),
-            'longitude' => $this->longitude,
-            'latitude' => $this->latitude,
-            'favourite' => $this->favourite,
+            'id' => $this->resource->id,
+            'name' => $this->resource->name,
+            'description' => $this->resource->description,
+            'from' => $this->resource->from->format('Y-m-d'),
+            'to' => $this->resource->to->format('Y-m-d'),
+            'longitude' => $this->resource->longitude,
+            'latitude' => $this->resource->latitude,
+            'favourite' => $this->resource->favourite,
             'created' => Carbon::parse($this->resource->created_at)->diffForHumans(),
-            'places' => PlaceShowResource::collection($this->places),
+            'places' => PlaceShowResource::collection($this->resource->places),
+            'images' => ImageResource::collection($this->resource->images),
         ];
     }
 }

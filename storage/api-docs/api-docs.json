@@ -857,6 +857,108 @@
                 ]
             }
         },
+        "/api/images": {
+            "post": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Update image",
+                "description": "Allows updating images.",
+                "operationId": "6b7ebc376b155537f1858fc7f3e6038c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "imageable_type": {
+                                        "type": "string",
+                                        "example": "App\\Models\\Travel"
+                                    },
+                                    "imageable_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "image": {
+                                        "description": "Image file",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "image": {
+                                            "type": "string",
+                                            "example": "http://localhost/storage/images/gKlbUY4YuSJ4PttnzXiuf3cBTugJy5Yxqr9rd8Si.png"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "image": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The image must be an image."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/profiles/{user}": {
             "get": {
                 "tags": [
@@ -3096,6 +3198,9 @@
         },
         {
             "name": "Friends"
+        },
+        {
+            "name": "Images"
         },
         {
             "name": "Profiles"

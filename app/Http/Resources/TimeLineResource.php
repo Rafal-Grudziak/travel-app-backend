@@ -16,8 +16,8 @@ class TimeLineResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'travel' => new TravelListResource($this),
-            'user' => new UserResource($this->user),
+            'travel' => new TravelListResource($this->resource),
+            'user' => new UserResource($this->resource->user),
         ];
     }
 }
