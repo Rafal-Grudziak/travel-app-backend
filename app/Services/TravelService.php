@@ -78,11 +78,11 @@ class TravelService extends ModelService
         $travel->places()->whereNotIn('id', $places->pluck('id')->filter(fn ($item) => $item !== null))->delete();
 
         foreach ($places->whereNotNull('id') as $place) {
-            $travelCondition = $this->placeService->update($place, $travel->places()->find($place->id));
+            $this->placeService->update($place, $travel->places()->find($place->id));
         }
 
         foreach ($places->whereNull('id') as $place) {
-            $travelCondition = $this->placeService->store($travel, $place);
+            $this->placeService->store($travel, $place);
         }
     }
 
