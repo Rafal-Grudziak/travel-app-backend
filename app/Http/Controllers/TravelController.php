@@ -433,9 +433,9 @@ class TravelController extends BaseController
             new OA\Response(response: 404, description: 'Travel not found')
         ]
     )]
-    public function destroy(TravelDeleteRequest $request, Travel $travel): JsonResponse
+    public function destroy(TravelDeleteRequest $request, Travel $travel,  TravelService $travelService): JsonResponse
     {
-        $travel->delete();
+        $travelService->deleteTravel($travel);
         return response()->json(['message' => 'Travel deleted successfully']);
     }
 

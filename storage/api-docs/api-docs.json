@@ -897,7 +897,7 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "image": {
+                                        "url": {
                                             "type": "string",
                                             "example": "http://localhost/storage/images/gKlbUY4YuSJ4PttnzXiuf3cBTugJy5Yxqr9rd8Si.png"
                                         }

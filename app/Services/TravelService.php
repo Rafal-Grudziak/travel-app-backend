@@ -6,6 +6,7 @@ use App\Http\DTOs\TravelStoreDTO;
 use App\Models\Travel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 
 class TravelService extends ModelService
 {
@@ -57,6 +58,24 @@ class TravelService extends ModelService
         $travel->save();
 
         return $travel;
+    }
+
+    public function deleteTravel(Travel $travel): void
+    {
+        foreach ($travel->images as $image) {
+            File::delete(storage_path('app/public/'.$image->path));
+            $image->delete();
+        }
+
+        foreach ($travel->places as $place) {
+            foreach ($place->images as $image) {
+                File::delete(storage_path('app/public/'.$image->path));
+                $image->delete();
+            }
+            $place->delete();
+        }
+
+        $travel->delete();
     }
 
     private function setTravelValues(Travel $travel, TravelStoreDTO $dto): Travel
