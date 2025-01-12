@@ -4,7 +4,7 @@ namespace App\Http\DTOs;
 
 use Illuminate\Http\Request;
 
-readonly class ProfileSearchDto
+readonly class ProfileSearchDTO
 {
     public function __construct(
         public int $page = 1,
