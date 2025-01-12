@@ -25,7 +25,7 @@ class TravelListResource extends JsonResource
             'latitude' => $this->resource->latitude,
             'favourite' => $this->resource->favourite,
             'created' => Carbon::parse($this->resource->created_at)->diffForHumans(),
-            'image' => new ImageResource($this->resource->images()->first()),
+            'image' => new ImageResource($this->resource->images()->last()),
         ];
     }
 }
