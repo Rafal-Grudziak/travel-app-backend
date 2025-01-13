@@ -6,9 +6,18 @@ class TimeLineIndexFilter extends BaseIndexFilter
 {
     public function filter(): void
     {
+        $this->filterOnlyFriendsTravels();
         $this->filterByDateRange();
 
         $this->orderBy('created_at', $this->filterDto->sort_direction ?? 'desc');
+    }
+
+    protected function filterOnlyFriendsTravels(): void
+    {
+        $user = auth()->user();
+        $friendIds = $user->friends()->pluck('id');
+
+        $this->builder->whereIn('user_id', $friendIds);
     }
 
     protected function filterByDateRange(): void
